@@ -170,7 +170,7 @@ export function App() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {filteredItems.map((item, idx) => (
+            {filteredItems.map((item) => (
               <FeedCard
                 key={item.id}
                 item={item}

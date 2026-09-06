@@ -4,29 +4,26 @@ import type { MediaItem, Folder, ReactionCounts } from '../types';
 
 interface FeedCardProps {
   item: MediaItem;
-  folders: Folder[];
+  folders?: Folder[];
   onClick: () => void;
   onReaction: (id: string, emoji: keyof ReactionCounts) => void;
   onToggleFavorite: (id: string) => void;
 }
 
 export const FeedCard: React.FC<FeedCardProps> = ({
-  item, folders, onClick, onToggleFavorite
+  item, onClick, onToggleFavorite
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [isReady, setIsReady] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
 
-  const folder = folders.find(f => f.id === item.folderId);
   const date = new Date(item.timestamp).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
 
   // Cleanup on unmount / item change
   useEffect(() => {
     setIsPlaying(false);
     setProgress(0);
-    setIsReady(false);
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       if (audioRef.current) {
@@ -201,7 +198,6 @@ export const FeedCard: React.FC<FeedCardProps> = ({
               ref={audioRef}
               src={item.dataUrl}
               preload="auto"
-              onCanPlay={() => setIsReady(true)}
               onEnded={handleEnded}
               onPause={() => {
                 if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);

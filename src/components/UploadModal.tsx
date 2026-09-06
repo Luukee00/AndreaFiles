@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Camera, Mic, Heart, Upload, Sparkles, Wand2, Square, Play, Pause, RefreshCw, CheckCircle2, FileAudio, AlertCircle } from 'lucide-react';
+import { X, Mic, Upload, Sparkles, Wand2, Square, Play, Pause, RefreshCw, CheckCircle2, FileAudio, AlertCircle } from 'lucide-react';
 import type { Folder, MediaItem, MediaType } from '../types';
 import { classifyImage, type ClassificationResult } from '../services/aiClassifier';
 import { startAudioRecording, transcribeAudioFile } from '../services/speechRecognition';

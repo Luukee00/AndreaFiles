@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  X, Play, Pause, Download, Heart, Wand2, Sparkles,
-  Copy, Check, Trash2, Volume2
+  X, Play, Pause, Download, Heart, Wand2,
+  Copy, Check, Trash2
 } from 'lucide-react';
 import type { MediaItem, Folder, ReactionCounts } from '../types';
 
 interface DetailModalProps {
   item: MediaItem | null;
-  allItems: MediaItem[];
-  folders: Folder[];
+  allItems?: MediaItem[];
+  folders?: Folder[];
   onClose: () => void;
   onNavigate?: (item: MediaItem) => void;
   onReaction: (id: string, emoji: keyof ReactionCounts) => void;
@@ -19,7 +19,7 @@ interface DetailModalProps {
 const REACTIONS: (keyof ReactionCounts)[] = ['❤️', '🔥', '😂', '🥂', '🎉'];
 
 export const DetailModal: React.FC<DetailModalProps> = ({
-  item, allItems, folders, onClose,
+  item, folders = [], onClose,
   onReaction, onToggleFavorite, onDeleteItem
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -32,14 +32,13 @@ export const DetailModal: React.FC<DetailModalProps> = ({
   useEffect(() => {
     setIsPlaying(false);
     setCurrentTime(0);
-    setProgress(0);
   }, [item?.id]);
 
-  const [progress, setProgress] = useState(0);
 
   if (!item) return null;
 
   const folder = folders.find(f => f.id === item.folderId);
+
   const date = new Date(item.timestamp).toLocaleDateString('it-IT', {
     day: 'numeric', month: 'long', year: 'numeric'
   });
@@ -228,8 +227,6 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                 onTimeUpdate={() => {
                   if (!audioRef.current) return;
                   setCurrentTime(audioRef.current.currentTime);
-                  const p = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-                  setProgress(isNaN(p) ? 0 : p);
                 }}
                 onLoadedMetadata={() => {
                   if (audioRef.current) setDuration(audioRef.current.duration);
